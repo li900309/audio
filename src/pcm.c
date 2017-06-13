@@ -820,7 +820,7 @@ struct pcm_params *pcm_params_get(unsigned int card, unsigned int device,
 
     fd = open(fn, O_RDWR);
     if (fd < 0) {
-        fprintf(stderr, "cannot open device '%s'\n", fn);
+        printf("cannot open device '%s'\n", fn);
         goto err_open;
     }
 
@@ -830,7 +830,7 @@ struct pcm_params *pcm_params_get(unsigned int card, unsigned int device,
 
     param_init(params);
     if (ioctl(fd, SNDRV_PCM_IOCTL_HW_REFINE, params)) {
-        fprintf(stderr, "SNDRV_PCM_IOCTL_HW_REFINE error (%d)\n", errno);
+        printf("SNDRV_PCM_IOCTL_HW_REFINE error (%d)\n", errno);
         goto err_hw_refine;
     }
 
@@ -1385,7 +1385,7 @@ int pcm_mmap_transfer(struct pcm *pcm, const void *buffer, unsigned int bytes)
         /* get the available space for writing new frames */
         avail = pcm_avail_update(pcm);
         if (avail < 0) {
-            fprintf(stderr, "cannot determine available mmap frames");
+            printf("cannot determine available mmap frames");
             return err;
         }
 
@@ -1393,7 +1393,7 @@ int pcm_mmap_transfer(struct pcm *pcm, const void *buffer, unsigned int bytes)
         if (!pcm->running &&
             (pcm->buffer_size - avail) >= pcm->config.start_threshold) {
             if (pcm_start(pcm) < 0) {
-               fprintf(stderr, "start error: hw 0x%x app 0x%x avail 0x%x\n",
+               printf("start error: hw 0x%x app 0x%x avail 0x%x\n",
                     (unsigned int)pcm->mmap_status->hw_ptr,
                     (unsigned int)pcm->mmap_control->appl_ptr,
                     avail);
@@ -1414,7 +1414,7 @@ int pcm_mmap_transfer(struct pcm *pcm, const void *buffer, unsigned int bytes)
             if (err < 0) {
                 pcm->prepared = 0;
                 pcm->running = 0;
-                fprintf(stderr, "wait error: hw 0x%x app 0x%x avail 0x%x\n",
+                printf("wait error: hw 0x%x app 0x%x avail 0x%x\n",
                     (unsigned int)pcm->mmap_status->hw_ptr,
                     (unsigned int)pcm->mmap_control->appl_ptr,
                     avail);
@@ -1434,7 +1434,7 @@ int pcm_mmap_transfer(struct pcm *pcm, const void *buffer, unsigned int bytes)
         /* copy frames from buffer */
         frames = pcm_mmap_transfer_areas(pcm, (void *)buffer, offset, frames);
         if (frames < 0) {
-            fprintf(stderr, "write error: hw 0x%x app 0x%x avail 0x%x\n",
+            printf("write error: hw 0x%x app 0x%x avail 0x%x\n",
                     (unsigned int)pcm->mmap_status->hw_ptr,
                     (unsigned int)pcm->mmap_control->appl_ptr,
                     avail);
