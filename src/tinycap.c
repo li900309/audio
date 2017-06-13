@@ -34,13 +34,6 @@
 #include <string.h>
 #include <limits.h>
 
-#define ID_RIFF 0x46464952
-#define ID_WAVE 0x45564157
-#define ID_FMT  0x20746d66
-#define ID_DATA 0x61746164
-
-#define FORMAT_PCM 1
-
 int capturing = 1;
 int prinfo = 1;
 
