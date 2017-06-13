@@ -35,20 +35,34 @@ static char* getAbsolutePath(char* path) {
 	return "fo|../res/dingdong.jet|0|815696";
 }
 
+	//typedef int (*CAE_FUNC)(CAE_HANDLE *cae, const char* resPath, cae_ivw_fn ivwCb, cae_audio_fn audioCb, const char*param, void *userData);
+
+	typedef int (*CAE_FUNC)(...);
+int loadCAE()
+{
+	
+}
+
 int main()
 {
-	const char* resPathChar = "fo|../res/dingdong.jet|0|815696";
+	const char* resPathChar = "fo|./dingdong.jet|0|815696";
 	CAE_HANDLE handle;
-	int (*caenew)(CAE_HANDLE *cae, const char* resPath, cae_ivw_fn ivwCb, cae_audio_fn audioCb, const char*param, void *userData);
 
+	CAE_FUNC CAENew, CAEAudioWrite, CAEResetEng, CAESetRealBeam, CAEDestroy, CAEExtract16K;
 	printf("Hello CAE !\n");
 
 	printf("CAENew | res path:%s", resPathChar);
 
 	void * handle1;
-	handle1 = dlopen ("libcae.so", RTLD_LAZY); 
-	caenew = dlsym(handle1, "CAENew");  
-	int ret = caenew(&handle, resPathChar, ivw_cbf, audio_cbf, NULL, NULL);
+	handle1 = dlopen ("libcae.so", RTLD_NOW); 
+	*(void **)(&CAENew) = dlsym(handle1, "CAENew");  
+	*(void **)(&CAEAudioWrite) = dlsym(handle1, "CAEAudioWrite");  
+	*(void **)(&CAEResetEng) = dlsym(handle1, "CAEResetEng");  
+	*(void **)(&CAESetRealBeam) = dlsym(handle1, "CAESetRealBeam");  
+	*(void **)(&CAEDestroy) = dlsym(handle1, "CAEDestroy");  
+	*(void **)(&CAEExtract16K) = dlsym(handle1, "CAEExtract16K");
+
+	int ret = CAENew(&handle, resPathChar, ivw_cbf, audio_cbf, NULL, NULL);
 
 	printf("CAENew | cae handle:%p", handle);
 
